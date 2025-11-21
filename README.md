@@ -31,6 +31,9 @@ REST API приложение для управления справочнико
 - Ограничение вложенности до 3 уровней
 - Поиск организаций по дереву деятельностей
 
+## Диограма БД
+![alt text](DB_diogram.png)
+
 ## Установка и запуск
 
 ### Предварительные требования
@@ -43,8 +46,8 @@ REST API приложение для управления справочнико
 1. Клонируйте репозиторий:
 
 ```bash
-git clone <repository-url>
-cd organization-directory
+git clone git@github.com:Sovraska/Tesovoe_dictionary_for_organistaions.git
+cd Tesovoe_dictionary_for_organistaions
 ```
 
 
@@ -110,9 +113,13 @@ alembic upgrade head
 ```bash
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
+# Локальная доступность:
+
 1. Приложение будет доступно по адресу: http://localhost:8000
 
 2. Документация API:
     - Swagger UI: http://localhost:8000/docs
     - ReDoc: http://localhost:8000/redoc
     - Offline: `openapi.yaml`
+
+### Для доступа нужен Header `x-api-key` этот ключ можно установить в .env `API_KEY`
