@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, Integer, ForeignKey, Float
+from sqlalchemy import Column, String, Boolean, Integer, ForeignKey, Float, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.session import Base
@@ -10,6 +10,14 @@ class BaseModel(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
 
 
+organisation_activity = Table(
+    'organisation_activity',
+    Base.metadata,
+    Column('organisation_id', Integer, ForeignKey('organisation.id'), primary_key=True),
+    Column('activity_id', Integer, ForeignKey('activity.id'), primary_key=True)
+)
+
+
 class Organisation(BaseModel):
     __tablename__ = "organisation"
 
@@ -18,8 +26,11 @@ class Organisation(BaseModel):
     building: Mapped[list["Building"]] = relationship("Building", back_populates="organisation")
     building_id: Mapped[int] = mapped_column(ForeignKey("building.id"))
 
-    activity: Mapped[list["Activity"]] = relationship("Activity", back_populates="organisation")
-    activity_id: Mapped[int] = mapped_column(ForeignKey("activity.id"))
+    activities: Mapped[list["Activity"]] = relationship(
+        "Activity",
+        secondary=organisation_activity,
+        back_populates="organisations"
+    )
 
 
 class Building(BaseModel):
@@ -38,4 +49,8 @@ class Activity(BaseModel):
     parent_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("activity.id"))
     children = relationship("Activity")
 
-    organisation: Mapped[Organisation] = relationship("Organisation", back_populates="activity")
+    organisations: Mapped[list["Organisation"]] = relationship(
+        "Organisation",
+        secondary=organisation_activity,
+        back_populates="activities"
+    )

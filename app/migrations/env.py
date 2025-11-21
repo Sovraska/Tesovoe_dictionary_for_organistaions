@@ -1,7 +1,7 @@
 import os
 import sys
 from logging.config import fileConfig
-from pathlib import Path
+from os.path import dirname
 
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, URL
@@ -10,9 +10,10 @@ from sqlalchemy import pool
 from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(BASE_DIR))
+sys.path.append(dirname(dirname(dirname(__file__))))
+
 from core.session import Base
+from core.db.models import *
 
 load_dotenv()
 DB_USERNAME = os.environ.get('DB_USERNAME')
@@ -35,6 +36,7 @@ config = context.config
 fileConfig(config.config_file_name)
 
 target_metadata = Base.metadata
+
 
 
 def run_migrations_offline():

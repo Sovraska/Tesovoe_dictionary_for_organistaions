@@ -76,5 +76,5 @@ async def list_all_tree_activity_org(
         api_key: ApiKeyDep,
         activity_name: str,
 ):
-    res = res = await organisation_service.get_by_activity_tree_organisation(activity_name)
+    res = await organisation_service.get_by_activity_tree_organisation(activity_name)
     return jsonable_encoder(res)

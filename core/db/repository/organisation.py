@@ -5,7 +5,7 @@ from sqlalchemy import func, select, and_, literal
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
-from core.db.models import Organisation, Activity, Building
+from core.db.models import Organisation, Activity, Building, organisation_activity
 
 
 class OrganisationRepository:
@@ -41,7 +41,7 @@ class OrganisationRepository:
 
     async def get_by_activity(self, activity_name):
         async with self.session_factory() as async_session:
-            stmt = select(Organisation).join(Organisation.activity).where(Activity.title == activity_name)
+            stmt = select(Organisation).join(organisation_activity).join(Activity).where(Activity.title == activity_name)
             result = await async_session.execute(stmt)
             return result.scalars().first()
 
@@ -78,18 +78,18 @@ class OrganisationRepository:
                 select(
                     parent_activity.id,
                     parent_activity.title,
-                    literal(1).label("level")  # устанавливаем 1 уровень (ибо 0 уже взяли)
+                    literal(1).label("level")
                 )
                 .where(parent_activity.title == activity_name)
                 .cte(name="activity_hierarchy", recursive=True)
             )
 
-            # ограниучение рекурсии до 3х
+            # ограничение рекурсии до 3х левелов
             child_query = (
                 select(
                     child_activity.id,
                     child_activity.title,
-                    (activity_hierarchy.c.level + 1).label("level")  # правило инкремента уровня
+                    (activity_hierarchy.c.level + 1).label("level")
                 )
                 .where(
                     and_(
@@ -100,10 +100,10 @@ class OrganisationRepository:
             )
             activity_hierarchy = activity_hierarchy.union_all(child_query)
 
-            # Запрос организаций с найденым деревом активностей
             query = (
                 select(Organisation)
-                .join(Organisation.activity)
+                .distinct(Organisation.id)
+                .join(Organisation.activities)
                 .where(Activity.id.in_(select(activity_hierarchy.c.id)))
             )
 

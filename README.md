@@ -63,6 +63,11 @@ API_KEY=test
 ```bash
 docker compose build .
 ```
+фикстуры подгружаюся автоматичесски при запуске проекта но
+их можно запустить и отдельно используя
+```bash
+docker compose exec <container_name> python3 create_fixtures.py
+```
 
 4 Запустите его:
 ```bash
@@ -86,10 +91,18 @@ pip install -r requirements.txt
 ```
 
 3. Настройте переменные окружения в .env файле
-
+```dotenv
+DB_USERNAME=test_username
+DB_NAME=test_db_name
+DB_PASSWORD=test_password
+DB_HOST=localhost
+DB_PORT=5432
+API_KEY=test
+```
 4. Выполните миграции:
 
 ```bash
+cd app
 alembic upgrade head
 ```
 5. Запустите сервер разработки:
