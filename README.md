@@ -46,7 +46,7 @@ REST API приложение для управления справочнико
 1. Клонируйте репозиторий:
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:Sovraska/Tesovoe_dictionary_for_organistaions.git
 cd organization-directory
 ```
 
