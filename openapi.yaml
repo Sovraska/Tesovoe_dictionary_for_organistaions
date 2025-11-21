@@ -1,0 +1,164 @@
+openapi: '3.0.1'
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /api/org/:
+    get:
+      tags:
+        - API
+      summary: List Org
+      operationId: list_org_api_org__get
+      parameters:
+        - name: activity_name
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+            title: Activity Name
+        - name: organisation_name
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+            title: Organisation Name
+        - name: building_address
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+            title: Building Address
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/org/{organisation_id}:
+    get:
+      tags:
+        - API
+      summary: Get By Id Org
+      operationId: get_by_id_org_api_org__organisation_id__get
+      parameters:
+        - name: organisation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Organisation Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/org/location/:
+    get:
+      tags:
+        - API
+      summary: List All Org Location
+      operationId: list_all_org_location_api_org_location__get
+      parameters:
+        - name: latitude
+          in: query
+          required: true
+          schema:
+            type: number
+            title: Latitude
+        - name: longitude
+          in: query
+          required: true
+          schema:
+            type: number
+            title: Longitude
+        - name: radius
+          in: query
+          required: true
+          schema:
+            type: integer
+            title: Radius
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/org/activity/:
+    get:
+      tags:
+        - API
+      summary: List All Tree Activity Org
+      operationId: list_all_tree_activity_org_api_org_activity__get
+      parameters:
+        - name: activity_name
+          in: query
+          required: true
+          schema:
+            type: string
+            title: Activity Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
