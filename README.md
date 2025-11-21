@@ -100,6 +100,8 @@ alembic upgrade head
 ```bash
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
+# Локальная доступность:
+
 1. Приложение будет доступно по адресу: http://localhost:8000
 
 2. Документация API:
