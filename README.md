@@ -47,7 +47,7 @@ REST API приложение для управления справочнико
 
 ```bash
 git clone git@github.com:Sovraska/Tesovoe_dictionary_for_organistaions.git
-cd organization-directory
+cd Tesovoe_dictionary_for_organistaions
 ```
 
 
